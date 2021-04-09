@@ -13,7 +13,7 @@ Future<void> generateConfig(List<String> arguments) {
   return loadConfig(parser.parseConfigPath()).then((yamlConfig) {
     return Config.fromMap(
       PlatformValueProvider(),
-      yamlConfig,
+      yamlConfig!,
       parser.parseArguments(yamlConfig),
     );
   }).then((config) {

@@ -14,7 +14,7 @@ class ArgumentParser {
 
   /// Defines if `config` key was specified
   /// during command run
-  String parseConfigPath() {
+  String? parseConfigPath() {
     ArgParser parser = ArgParser()..addOption(ConfigFieldType.CONFIG);
 
     final ArgResults argResults = parser.parse(
@@ -28,7 +28,7 @@ class ArgumentParser {
   }
 
   /// Provides arguments from command based on YAML fields config
-  Map<String, dynamic> parseArguments(YamlMap config) {
+  Map<String?, dynamic> parseArguments(YamlMap config) {
     final ArgParser parser = ArgParser();
 
     if (!config.containsKey(ConfigFieldType.FIELDS)) {

@@ -56,7 +56,7 @@ class ConfigGenerator {
                         ..static = field.isStatic
                         ..modifier = field.modifier
                         ..type = Reference(field.type)
-                        ..assignment = Code(field.value),
+                        ..assignment = Code(field.value!),
                     )))),
             ]));
 
@@ -71,7 +71,7 @@ class ConfigGenerator {
   }
 
   Future<void> _generateDotEnv() async {
-    final File configFile = File(config.dotEnvFilePath);
+    final File configFile = File(config.dotEnvFilePath!);
 
     final String envString = config.dotEnvFields
         .map((field) => '${field.name}=${field.dotEnvValue}')

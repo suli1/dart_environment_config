@@ -17,7 +17,7 @@ class FieldConfig {
   final Map<dynamic, dynamic> extField;
 
   /// Value provided from command params
-  final String _value;
+  final String? _value;
 
   final PlatformValueProvider _valueProvider;
 
@@ -26,7 +26,7 @@ class FieldConfig {
       this.name,
       this.field,
       this.extField,
-      [String value]
+      [String? value]
       ) : _value = value, _valueProvider = valueProvider {
     if (_fieldValue == null) {
       throw ValidationError(name, '"$name" is required');
@@ -72,8 +72,8 @@ class FieldConfig {
   /// Get value for config class
   ///
   /// If `pattern` is specified, value will injected into it
-  String get value {
-    String pattern = _pattern;
+  String? get value {
+    String? pattern = _pattern;
 
     if (_pattern == null && type == 'String') {
       pattern = '\'__VALUE__\'';
@@ -83,18 +83,18 @@ class FieldConfig {
       return _fieldValue;
     }
 
-    return pattern.replaceAll(_PATTERN_REGEXP, _fieldValue);
+    return pattern.replaceAll(_PATTERN_REGEXP, _fieldValue!);
   }
 
   /// Value for key in `.env` file
-  String get dotEnvValue {
-    return _pattern?.replaceAll(_PATTERN_REGEXP, _fieldValue) ?? _fieldValue;
+  String? get dotEnvValue {
+    return _pattern?.replaceAll(_PATTERN_REGEXP, _fieldValue!) ?? _fieldValue;
   }
 
-  String get _pattern => extField[ConfigFieldType.PATTERN] ?? field[ConfigFieldType.PATTERN];
+  String? get _pattern => extField[ConfigFieldType.PATTERN] ?? field[ConfigFieldType.PATTERN];
 
-  String get _globalValue {
-    final String globalKey = extField[ConfigFieldType.ENV_VAR] ?? field[ConfigFieldType.ENV_VAR];
+  String? get _globalValue {
+    final String? globalKey = extField[ConfigFieldType.ENV_VAR] ?? field[ConfigFieldType.ENV_VAR];
 
     if ((globalKey ?? '').isNotEmpty) {
       return _valueProvider.getValue(globalKey);
@@ -103,7 +103,7 @@ class FieldConfig {
     return null;
   }
 
-  String get _fieldValue {
+  String? get _fieldValue {
     return (_value ?? _globalValue ?? extField[ConfigFieldType.DEFAULT] ?? field[ConfigFieldType.DEFAULT])?.toString();
   }
 }

@@ -7,7 +7,7 @@ import 'platform_value_provider.dart';
 /// params from command
 class Config {
   /// Arguments from command
-  final Map<String, dynamic> arguments;
+  final Map<String?, dynamic> arguments;
 
   /// Config object from yaml file
   final Map<dynamic, dynamic> config;
@@ -24,11 +24,11 @@ class Config {
     Map<dynamic, dynamic> config,
     Map<dynamic, dynamic> args
   ) {
-    final String devExtension = config[ConfigFieldType.DEV_EXTENSION];
+    final String? devExtension = config[ConfigFieldType.DEV_EXTENSION];
     final Map<dynamic, dynamic> configFields = config[ConfigFieldType.FIELDS];
     final Map<dynamic, dynamic> extensions = config[ConfigFieldType.EXTENSIONS] ?? {};
     Map<dynamic, dynamic> extension = {};
-    String extensionName;
+    String? extensionName;
 
     if (devExtension != null && args[devExtension]) {
       extensionName = devExtension;
@@ -55,7 +55,7 @@ class Config {
         args[key]
       ));
 
-    return Config(config, args, fields, extension);
+    return Config(config, args as Map<String?, dynamic>, fields, extension);
   }
 
   /// Target file for generated config class
@@ -64,20 +64,20 @@ class Config {
   }
 
   /// Target file for `.env` params
-  String get dotEnvFilePath {
+  String? get dotEnvFilePath {
     return _getConfigValue(ConfigFieldType.DOTENV_PATH, '.env');
   }
 
   /// Provides config class name
   String get className {
-    String className = _getConfigValue(ConfigFieldType.CLASS);
+    String? className = _getConfigValue(ConfigFieldType.CLASS);
 
     if (className != null) {
       return className;
     }
 
     final String fileName =
-        RegExp(r'\/([\w_-]+)\.dart$').firstMatch(filePath).group(1);
+        RegExp(r'\/([\w_-]+)\.dart$').firstMatch(filePath)!.group(1)!;
 
     return fileName
         .split('_')
@@ -110,7 +110,7 @@ class Config {
   /// Defines if generator should try to create Dart config file
   bool get createConfigClass => classConfigFields.isNotEmpty;
 
-  String _getConfigValue(key, [String defaultValue]) {
+  String? _getConfigValue(key, [String? defaultValue]) {
     if (arguments.containsKey(key) && !arguments[key].isEmpty) {
       return arguments[key];
     }
